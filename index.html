@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CineStar Premiere - Now Showing & Schedule</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+    --bg-dark: #0a0e17;
+    --card-dark: #121929;
+    --cinema-red: #e50914;
+    --gold: #f59e0b;
+    --text-muted: #94a3b8;
+}
+body {
+    background-color: var(--bg-dark);
+    font-family: 'Urbanist', sans-serif;
+    color: #e2e8f0;
+}
+.navbar {
+    background: rgba(10, 14, 23, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.hero {
+    min-height: 75vh;
+    background: linear-gradient(rgba(10, 14, 23, 0.5), var(--bg-dark)),
+                url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1600') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+}
+.stat-card {
+    background: var(--card-dark);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 24px;
+    transition: transform 0.3s;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(229, 9, 20, 0.4);
+}
+.movie-poster {
+    height: 380px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.movie-poster:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(229, 9, 20, 0.3);
+}
+.table-cinema {
+    background: var(--card-dark);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+.table-cinema thead th {
+    background: rgba(229, 9, 20, 0.15);
+    color: #ff8a8a;
+    border: none;
+    padding: 16px;
+}
+.table-cinema tbody td {
+    padding: 16px;
+    border-color: rgba(255,255,255,0.05);
+    color: #e2e8f0;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-extrabold fs-4" href="#">
+            <i class="fa-solid fa-film text-danger me-2"></i> CINE<span class="text-danger">STAR</span>
+        </a>
+        <div class="ms-auto d-flex align-items-center gap-3">
+            <a href="#jadwal" class="nav-link text-white-50">Jadwal Studio</a>
+            <a href="login.html" class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-bold">
+                <i class="fa-solid fa-user-lock me-1"></i> Staff Portal
+            </a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container text-center py-5">
+        <span class="badge bg-danger px-3 py-2 rounded-pill fw-bold mb-3"><i class="fa-solid fa-sparkles me-1"></i> PREMIERE EXPERIENCES</span>
+        <h1 class="display-3 fw-extrabold mb-3 text-white">Nonton Film Pilihan dalam Kualitas IMAX & Dolby Atmos</h1>
+        <p class="lead text-white-50 max-w-700 mx-auto mb-4">Pantau jadwal tayang film terfavorit dan ketersediaan kursi studio secara real-time di CineStar Cinema.</p>
+        <a href="#jadwal" class="btn btn-danger btn-lg rounded-pill px-5 fw-bold shadow-lg">
+            <i class="fa-solid fa-ticket me-2"></i> Lihat Live Studio
+        </a>
+    </div>
+</section>
+
+<!-- STATISTIK BIOSKOP -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <h2 class="fw-extrabold text-danger m-0" id="stat-film">0</h2>
+                    <p class="text-white-50 small text-uppercase fw-bold mb-0 mt-2">Film Tayang Hari Ini</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <h2 class="fw-extrabold text-warning m-0" id="stat-studio">0</h2>
+                    <p class="text-white-50 small text-uppercase fw-bold mb-0 mt-2">Studio Aktif</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <h2 class="fw-extrabold text-info m-0" id="stat-tiket">0</h2>
+                    <p class="text-white-50 small text-uppercase fw-bold mb-0 mt-2">Tiket Terjual</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <h2 class="fw-extrabold text-success m-0" id="stat-okupansi">0%</h2>
+                    <p class="text-white-50 small text-uppercase fw-bold mb-0 mt-2">Tingkat Okupansi Kursi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LIVE STATUS STUDIO -->
+<section id="jadwal" class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h3 class="fw-extrabold m-0 text-white"><i class="fa-solid fa-clapperboard text-danger me-2"></i> Status Penayangan Studio</h3>
+                <p class="text-white-50 small mb-0">Informasi live langsung dari tim operator proyektor bioskop</p>
+            </div>
+        </div>
+
+        <div class="table-responsive table-cinema">
+            <table class="table table-dark table-hover mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th>Studio / Layar</th>
+                        <th>Film Diputar</th>
+                        <th class="text-center">Jam Tayang</th>
+                        <th class="text-center">Status Pemutaran</th>
+                        <th class="text-center">Status Audio/Teknis</th>
+                        <th class="text-center">Bukti Layar</th>
+                    </tr>
+                </thead>
+                <tbody id="liveStatusStudio">
+                    <tr><td colspan="6" class="text-center py-4 text-white-50">Menghubungkan ke sistem bioskop...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- POSTER SELEKSI HARI INI -->
+<section class="py-5">
+    <div class="container">
+        <h3 class="fw-extrabold mb-4 text-white"><i class="fa-solid fa-fire text-danger me-2"></i> Film Rekomendasi Hari Ini</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <img id="poster1" src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600" class="movie-poster">
+            </div>
+            <div class="col-md-4">
+                <img id="poster2" src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=600" class="movie-poster">
+            </div>
+            <div class="col-md-4">
+                <img id="poster3" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600" class="movie-poster">
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="py-5 border-top border-secondary border-opacity-25 text-center text-white-50">
+    <p class="mb-1 fw-bold text-white">CINESTAR CINEMA PREMIERE</p>
+    <small>© 2026 CineStar Entertainment. Semua Hak Dilindungi.</small>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDeOduyu626TZ9CR0JGvzBH0qJAoArT8rk",
+        authDomain: "sppgbangunsari02-b5cb1.firebaseapp.com",
+        projectId: "sppgbangunsari02-b5cb1",
+        storageBucket: "sppgbangunsari02-b5cb1.firebasestorage.app",
+        messagingSenderId: "497486447370",
+        appId: "1:497486447370:web:0b2b6ce4297b48d18b70f3"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // 1. Live Stats
+    db.collection("cinema_stats").doc("summary").onSnapshot((doc) => {
+        if(doc.exists) {
+            const d = doc.data();
+            document.getElementById("stat-film").innerText = d.total_film || "0";
+            document.getElementById("stat-studio").innerText = d.studio_aktif || "0";
+            document.getElementById("stat-tiket").innerText = d.tiket_terjual || "0";
+            document.getElementById("stat-okupansi").innerText = (d.okupansi || "0") + "%";
+        }
+    });
+
+    // 2. Poster Pilihan
+    db.collection("cinema_posters").doc("highlight").onSnapshot((doc) => {
+        if(doc.exists) {
+            const d = doc.data();
+            if(d.poster1) document.getElementById("poster1").src = d.poster1;
+            if(d.poster2) document.getElementById("poster2").src = d.poster2;
+            if(d.poster3) document.getElementById("poster3").src = d.poster3;
+        }
+    });
+
+    // 3. Status Studio Real-time
+    db.collection("studios").onSnapshot((snapshot) => {
+        const tbody = document.getElementById("liveStatusStudio");
+        tbody.innerHTML = "";
+        if(snapshot.empty) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-white-50">Belum ada studio yang aktif jadwalnya hari ini.</td></tr>`;
+            return;
+        }
+
+        snapshot.forEach((doc) => {
+            const s = doc.data();
+            let statusBadge = `<span class="badge bg-warning text-dark px-3 py-2 rounded-pill"><i class="fa-solid fa-hourglass-start me-1"></i> Standby</span>`;
+            if(s.status_tayang === "Sedang Memutar") {
+                statusBadge = `<span class="badge bg-success px-3 py-2 rounded-pill"><i class="fa-solid fa-play me-1"></i> Sedang Tayang</span>`;
+            } else if(s.status_tayang === "Selesai") {
+                statusBadge = `<span class="badge bg-secondary px-3 py-2 rounded-pill"><i class="fa-solid fa-check me-1"></i> Selesai / Cleaning</span>`;
+            }
+
+            let buktiHTML = s.foto_bukti ? `<a href="${s.foto_bukti}" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3"><i class="fa-solid fa-image me-1"></i>Cek Layar</a>` : `<span class="text-white-50 small">-</span>`;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="fw-bold text-white"><i class="fa-solid fa-tv text-danger me-2"></i>${s.nama_studio || "Studio"}</td>
+                    <td class="fw-semibold text-warning">${s.judul_film || "Belum Ditentukan"}</td>
+                    <td class="text-center font-monospace">${s.jam_mulai || "-"} WIB</td>
+                    <td class="text-center">${statusBadge}</td>
+                    <td class="text-center"><span class="badge bg-dark border border-secondary">${s.audio_status || "Dolby 7.1 OK"}</span></td>
+                    <td class="text-center">${buktiHTML}</td>
+                </tr>
+            `;
+        });
+    });
+</script>
+</body>
+</html>
